@@ -84,7 +84,7 @@ function startAnimation() {
             const visible = windowTickets.map((n) => {
                 // Подсветим текущий билет стрелкой
                 if (n === tickets[currentIndex]) {
-                    return `> Билет № ${n}`;
+                    return ` Билет № ${n}`;
                 }
                 return `  Билет № ${n}`;
             });
