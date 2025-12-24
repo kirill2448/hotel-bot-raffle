@@ -69,23 +69,28 @@ function startAnimation() {
     const winnerIndex = Math.floor(Math.random() * tickets.length);
     const winner = tickets[winnerIndex];
 
-    let step = 0;
-    const totalSteps = 80;
+    // Будем проходить по всем билетам, чтобы каждый хотя бы раз попал в "прокрутку"
+    let currentIndex = 0;
 
     statusLeft.textContent = "Идёт розыгрыш...";
     startBtn.disabled = true;
 
     animationTimer = setInterval(() => {
-        step += 1;
+        if (currentIndex < tickets.length) {
+            // Показываем "окно" из 20 строк вокруг текущего билета
+            const start = Math.max(0, currentIndex - 19);
+            const windowTickets = tickets.slice(start, start + 20);
 
-        const offset = Math.max(0, step - 20);
-        const visible = tickets.slice(offset, offset + 20).map((n) => `Билет № ${n}`);
+            const visible = windowTickets.map((n) => {
+                // Подсветим текущий билет стрелкой
+                if (n === tickets[currentIndex]) {
+                    return `> Билет № ${n}`;
+                }
+                return `  Билет № ${n}`;
+            });
 
-        if (step < totalSteps - 10) {
             setTextarea(visible);
-        } else if (step < totalSteps) {
-            const mix = visible.map((n) => `${n}`);
-            setTextarea(mix);
+            currentIndex += 1;
         } else {
             clearInterval(animationTimer);
             animationTimer = null;
