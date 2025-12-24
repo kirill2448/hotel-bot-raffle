@@ -8,9 +8,10 @@ body {
     font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
     background: radial-gradient(circle at top, #f5f9ff 0, #d9e2ff 40%, #b8c5ff 100%);
     display: flex;
-    align-items: center;
+    align-items: flex-start;
     justify-content: center;
     min-height: 100vh;
+    padding-top: 12px;
 }
 
 .app-root {
