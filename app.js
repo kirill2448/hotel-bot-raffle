@@ -36,11 +36,8 @@ async function loadTicketsFromFile() {
         tickets = numbers;
     } catch (e) {
         console.error("Ticket load error:", e);
-        // Fallback: если файла нет или пустой — генерируем стандартный диапазон
+        // Если файл не найден или пустой — оставляем список билетов пустым
         tickets = [];
-        for (let i = 1; i <= 150; i++) {
-            tickets.push(i);
-        }
     }
 }
 
