@@ -84,7 +84,7 @@ function startAnimation() {
         if (step < totalSteps - 10) {
             setTextarea(visible);
         } else if (step < totalSteps) {
-            const mix = visible.map((n) => `> ${n}`);
+            const mix = visible.map((n) => `${n}`);
             setTextarea(mix);
         } else {
             clearInterval(animationTimer);
