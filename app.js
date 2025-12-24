@@ -6,10 +6,41 @@ const startBtn = document.getElementById("start-btn");
 let tickets = [];
 let animationTimer = null;
 
-function generateTickets(count = 150) {
-    tickets = [];
-    for (let i = 1; i <= count; i++) {
-        tickets.push(i);
+async function loadTicketsFromFile() {
+    try {
+        const resp = await fetch("tickets.txt?" + Date.now());
+        if (!resp.ok) throw new Error("Failed to load tickets.txt");
+
+        const text = await resp.text();
+        const numbers = [];
+
+        text.split(/\r?\n/).forEach((line) => {
+            const trimmed = line.trim();
+            if (!trimmed) return;
+
+            trimmed
+                .replace(/,/g, " ")
+                .split(/\s+/)
+                .forEach((token) => {
+                    const n = parseInt(token, 10);
+                    if (!Number.isNaN(n)) {
+                        numbers.push(n);
+                    }
+                });
+        });
+
+        if (numbers.length === 0) {
+            throw new Error("No numbers in tickets.txt");
+        }
+
+        tickets = numbers;
+    } catch (e) {
+        console.error("Ticket load error:", e);
+        // Fallback: если файла нет или пустой — генерируем стандартный диапазон
+        tickets = [];
+        for (let i = 1; i <= 150; i++) {
+            tickets.push(i);
+        }
     }
 }
 
@@ -21,8 +52,11 @@ function setTextarea(lines) {
 
 function resetView() {
     statusLeft.textContent = "Розыгрыш билетов...";
-    generateTickets();
-    setTextarea(tickets.map((n) => `Билет № ${n}`));
+    if (!tickets || tickets.length === 0) {
+        setTextarea(["Нет билетов для розыгрыша"]);
+    } else {
+        setTextarea(tickets.map((n) => `Билет № ${n}`));
+    }
 }
 
 function startAnimation() {
@@ -31,7 +65,9 @@ function startAnimation() {
         animationTimer = null;
     }
 
-    generateTickets();
+    if (!tickets || tickets.length === 0) {
+        return;
+    }
 
     const winnerIndex = Math.floor(Math.random() * tickets.length);
     const winner = tickets[winnerIndex];
@@ -74,6 +110,11 @@ function startAnimation() {
 }
 
 startBtn.addEventListener("click", startAnimation);
-// При загрузке страницы сразу подготовить вид и запустить первую анимацию
-resetView();
-startAnimation();
+
+// При загрузке страницы сразу загрузить tickets.txt, подготовить вид и запустить первую анимацию
+(async function init() {
+    statusLeft.textContent = "Загрузка списка билетов...";
+    await loadTicketsFromFile();
+    resetView();
+    startAnimation();
+})();
