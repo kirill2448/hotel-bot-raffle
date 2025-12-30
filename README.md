@@ -1,1 +1,1 @@
-# hotel-bot-raffle
+# lotterey_bot
