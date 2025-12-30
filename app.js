@@ -69,9 +69,10 @@ function startAnimation() {
     const winnerIndex = Math.floor(Math.random() * tickets.length);
     const winner = tickets[winnerIndex];
 
-    // Будем проходить по списку с адаптивным шагом, чтобы при большом количестве билетов
-    // анимация не занимала слишком много времени
-    const targetSteps = 250; // примерно столько кадров хотим максимум
+    // Будем проходить по списку с адаптивным шагом. Настраиваем так, чтобы
+    // общая длительность анимации была порядка 30 секунд даже при большом
+    // количестве билетов.
+    const targetSteps = 400; // примерно столько кадров хотим максимум
     const step = Math.max(1, Math.ceil(tickets.length / targetSteps));
 
     let currentIndex = 0;
@@ -79,7 +80,7 @@ function startAnimation() {
     statusLeft.textContent = "Идёт розыгрыш...";
     startBtn.disabled = true;
 
-    const intervalMs = 35; // быстрее, чем было (60 мс)
+    const intervalMs = 75; // 400 * 75мс ≈ 30 секунд анимации
 
     animationTimer = setInterval(() => {
         if (currentIndex < tickets.length) {
