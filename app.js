@@ -66,8 +66,10 @@ function startAnimation() {
         return;
     }
 
-    const winnerIndex = Math.floor(Math.random() * tickets.length);
-    const winner = tickets[winnerIndex];
+    const winnersCount = Math.min(3, tickets.length);
+    // Перемешаем копию массива и возьмём первые три (или меньше, если билетов мало)
+    const shuffled = [...tickets].sort(() => Math.random() - 0.5);
+    const winners = shuffled.slice(0, winnersCount);
 
     // Будем проходить по списку с адаптивным шагом. Настраиваем так, чтобы
     // общая длительность анимации была порядка 30 секунд даже при большом
@@ -107,7 +109,10 @@ function startAnimation() {
                 "",
                 `Всего билетов: ${tickets.length}`,
                 "",
-                `ПОБЕДИТЕЛЬ: Билет № ${winner}`,
+                `Количество победителей: ${winnersCount}`,
+                "",
+                "Победители:",
+                ...winners.map((w, idx) => `${idx + 1}) Билет № ${w}`),
                 "==============================",
             ];
 
