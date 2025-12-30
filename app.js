@@ -69,11 +69,17 @@ function startAnimation() {
     const winnerIndex = Math.floor(Math.random() * tickets.length);
     const winner = tickets[winnerIndex];
 
-    // Будем проходить по всем билетам, чтобы каждый хотя бы раз попал в "прокрутку"
+    // Будем проходить по списку с адаптивным шагом, чтобы при большом количестве билетов
+    // анимация не занимала слишком много времени
+    const targetSteps = 250; // примерно столько кадров хотим максимум
+    const step = Math.max(1, Math.ceil(tickets.length / targetSteps));
+
     let currentIndex = 0;
 
     statusLeft.textContent = "Идёт розыгрыш...";
     startBtn.disabled = true;
+
+    const intervalMs = 35; // быстрее, чем было (60 мс)
 
     animationTimer = setInterval(() => {
         if (currentIndex < tickets.length) {
@@ -82,7 +88,7 @@ function startAnimation() {
             const windowTickets = tickets.slice(start, start + 20);
 
             const visible = windowTickets.map((n) => {
-                // Подсветим текущий билет стрелкой
+                // Подсветим текущий билет стрелкой (это текущий элемент окна)
                 if (n === tickets[currentIndex]) {
                     return ` Билет № ${n}`;
                 }
@@ -90,7 +96,7 @@ function startAnimation() {
             });
 
             setTextarea(visible);
-            currentIndex += 1;
+            currentIndex += step;
         } else {
             clearInterval(animationTimer);
             animationTimer = null;
@@ -108,7 +114,7 @@ function startAnimation() {
             statusLeft.textContent = "Розыгрыш завершён";
             startBtn.disabled = false;
         }
-    }, 60);
+    }, intervalMs);
 }
 
 startBtn.addEventListener("click", startAnimation);
