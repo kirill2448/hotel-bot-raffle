@@ -8,7 +8,7 @@ let animationTimer = null;
 
 async function loadTicketsFromFile() {
     try {
-        const resp = await fetch("tickets.txt?" + Date.now());
+        const resp = await fetch("tickets_month_winner_2025-10-01.txt?" + Date.now());
         if (!resp.ok) throw new Error("Failed to load tickets.txt");
 
         const text = await resp.text();
